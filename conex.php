@@ -1,7 +1,8 @@
 <?php 
+
 function Conectarse() 
+
 { 
-   error_reporting(1);
    if (!($link=mysql_connect("localhost","root",""))) 
    { 
       echo "Error conectando a la base de datos."; 
@@ -14,4 +15,5 @@ function Conectarse()
    } 
    return $link; 
 } 
+
 ?>

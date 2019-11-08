@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
+    
+
 
 
     <meta http-equiv='Content-Type' content='text/html'; charset='UTF-8'/>
+
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
@@ -31,11 +34,18 @@
     <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
     <script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
     <?php
+    mysql_set_charset('utf8');
+
 
     include 'conex.php';
 
+ 
+
   
     $link=Conectarse();
+
+
+
 
     $encode=array();
     global $selectGenero;
@@ -44,12 +54,17 @@
 
     $results=mysql_query("select g.gene_codigo, g.gene_descripcion from generos g", $link);
 
+ 
+
+
     //$results = $bd->query('SELECT ciudades.id_ciudad, departamentos.departamento, ciudades.ciudad FROM ciudades, departamentos where ciudades.id_departamento=departamentos.id_departamento and ciudades.deleted<>1');
     while ($row = mysql_fetch_array($results)) {
+    	
+
 
         $accion = '<a href="#" class="edit" data-toggle="modal" data-target="#myModal" id='.$row['gene_codigo'].'><i class="fa fa-edit"> Editar </i></a><a href="eliminarGeneros.php?gene_codigo='.$row['gene_codigo'].'"> <i class="fa fa-trash"> Eliminar </i></a>';
           $add = array("0" => $row["gene_codigo"],
-          "1" => $row["gene_descripcion"],
+          "1" => utf8_encode($row["gene_descripcion"]),
           "2" => $accion,"id_genero" => $row["gene_codigo"],
           "gene_descripcion" => $row["gene_descripcion"],
           "2" => $accion);
@@ -57,12 +72,16 @@
         $encode[]=$add;
     }
 
+
     /*$departamentos = $bd->query('SELECT id_departamento, departamento FROM departamentos');
     while ($raw = $departamentos->fetchArray()) {
     $selectDepartamento.="<option value='".$raw['id_departamento']."'>".$raw['departamento']."</option>";
     }*/
 
+
     $consulta = mysql_query('SELECT MAX(gene_codigo) as max from generos', $link);
+
+
    while ($ruw = mysql_fetch_array($consulta)) {
     $id_genero=$ruw['max']+1;
     }
@@ -98,6 +117,7 @@
 
       } );
     </script>
+
   </head>
 
   <body class="dt-example">
@@ -119,8 +139,18 @@
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
               <li><a href="inicio.php">Inicio</a></li>
-              <li><a href="prestamos.php">Prestamos</a></li>
+               <li class="dropdown">
+                <a href="prestamos.php" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prestamos<span class="caret"></span></a>
+                   
+              <ul class="dropdown-menu">
+                 <li><a href="prestamos.php">Historial</a></li>
+
+                <li><a href="prestados.php">Prestados</a></li>
+                <li><a href="devueltos.php">Devueltos</a></li>
+              </ul>
+            </li>
               <li class="dropdown">
+
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Libros<span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="libros.php">Libros</a></li>
@@ -147,7 +177,7 @@
         </div><!--/.container-fluid -->
       </nav>
         <div class="jumbotron" style="padding-top:2px;padding-bottom:2px;padding-left:15px;padding-right:15px;margin-top:5px;margin-bottom:15px">
-            <h2 style="margin-top:10px">Géneros <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal" id="nuevo_gen">
+            <h2 style="margin-top:10px">Géneros <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal">
   Agregar
 </button></h2>
         </div>
@@ -169,7 +199,7 @@
           </div>
           <div class="form-group">
             <label for="gene_descripcion">Género</label>
-            <input type="text" class="form-control" id="gene_descripcion" name="gene_descripcion" placeholder="Genero" required value="" style="text-transform:uppercase">
+            <input type="text" class="form-control" id="gene_descripcion" name="gene_descripcion" placeholder="Genero" required value="" style="text-transform:null">
             <input type="hidden" class="form-control" id="modificar" name="modificar" 
             required value="">
           </div>

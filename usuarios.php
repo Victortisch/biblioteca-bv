@@ -39,20 +39,19 @@
     global $selectCarreras;
     global $id_usuario;
 
-    $results=mysql_query("select u.usua_documento,u.usua_nombre,u.usua_apellido,u.usua_nacimiento,u.usua_contac,c.carr_descripcion from usuarios u, carreras c where u.carreras_carr_codigo = c.carr_codigo",$link);
+    $results=mysql_query("select u.usua_documento,u.usua_nombre,u.usua_apellido,u.usua_nacimiento,c.carr_descripcion from usuarios u, carreras c where u.carreras_carr_codigo = c.carr_codigo",$link);
 
     //$results = $bd->query('SELECT ciudades.id_ciudad, carreras.carrera, ciudades.ciudad FROM ciudades, carreras where ciudades.id_carrera=carreras.id_carrera and ciudades.deleted<>1');
     while ($row = mysql_fetch_array($results)) {
 
         $accion = '<a href="#" class="edit" data-toggle="modal" data-target="#myModal" id='.$row['usua_documento'].'><i class="fa fa-edit"> Editar </i></a><a href="eliminarUsuarios.php?usua_documento='.$row['usua_documento'].'"> <i class="fa fa-trash"> Eliminar</i></a>';
-
         $add = array(
           "0" => $row["usua_documento"],
-          "1" => $row["usua_nombre"],
-          "2" => $row["usua_apellido"],
+          "1" => utf8_encode($row["usua_nombre"]),
+          "2" => utf8_encode($row["usua_apellido"]),
           "3" => $row["usua_nacimiento"],
           "4" => $row["usua_contac"],
-          "5" => $row["carr_descripcion"],
+          "5" =>utf8_encode($row["carr_descripcion"]) ,
           "6" => $accion, //,"id_usuario",
           "usua_documento" => $row["usua_documento"],
           "usua_nombre" => $row["usua_nombre"],
@@ -62,13 +61,12 @@
           "carreras" => $row['carr_descripcion'],
           "6" => $accion
         );
-        
         $encode[]=$add;
     }
 
     $carreras = mysql_query('SELECT carr_codigo, carr_descripcion FROM carreras',$link);
     while ($row1 = mysql_fetch_array($carreras)) {
-    $selectCarreras.="<option value='".$row1['carr_codigo']."'>".$row1['carr_descripcion']."</option>";
+    $selectCarreras.="<option value='".utf8_encode($row1['carr_codigo'])."'>".utf8_encode($row1['carr_descripcion'])."</option>";
     }
 
     $consulta = mysql_query('SELECT MAX(usua_documento) as max from usuarios',$link);
@@ -87,25 +85,36 @@
                 { title: "Nombre" },
                 { title: "Apellido" },
                 { title: "Nacimiento" },
-                { title: "Contacto" },
+				{ title: "Contacto" },
                 { title: "Carrera" },
                 { title: "Operaciones" }
 
             ]
         } );
         $('#example tbody').on('click', 'tr', function () {
-        var data = table.row( this ).data();
-        $('#formUsuarios input[name="usua_documento"]').val(data[0]);
-        $('#formUsuarios input[name="usua_nombre"]').val(data[1]);
-        $('#formUsuarios input[name="usua_apellido"]').val(data[2]);
-        $('#formUsuarios input[name="usua_nacimiento"]').val(data[3]);
-        $('#formUsuarios input[name="usua_contac"]').val(data[4]);
-        $('#formUsuarios input[name="modificar"]').val(1);
-        var car=data[5];
-        $("#carreras option").each(function() { this.selected = (this.text == car); });
+          var data = table.row( this ).data();
+          $('#formUsuarios input[name="usua_documento"]').val(data[0]);
+          $('#formUsuarios input[name="usua_nombre"]').val(data[1]);
+          $('#formUsuarios input[name="usua_apellido"]').val(data[2]);
+          $('#formUsuarios input[name="usua_nacimiento"]').val(data[3]);
+		  $('#formUsuarios input[name="usua_contac"]').val(data[4]);
+          $('#formUsuarios input[name="modificar"]').val(true);
+          var car=data[4];
+          $("#carreras option").each(function() { this.selected = (this.text == car); });
+        });
+
+        //Cambiar valores del formulario para poder agregar un nuevo usuarie
+        $('#nuevo_usua').on('click', function () {
+          $('#formUsuarios input[name="usua_documento"]').val('');
+          $('#formUsuarios input[name="usua_nombre"]').val('');
+          $('#formUsuarios input[name="usua_apellido"]').val('');
+          $('#formUsuarios input[name="usua_nacimiento"]').val('');
+		  $('#formUsuarios input[name="usua_contac"]').val('');
+          $('#formUsuarios input[name="modificar"]').val(0);
+          $("#carreras")[0].selectedIndex = 0;
+        });
         
-    } );
-    } );
+      });
     </script>
   </head>
 
@@ -123,13 +132,27 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="inicio.php">Biblioteca</a>
+            <a class="navbar-brand" href="#">Biblioteca</a>
           </div>
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
             <li><a href="inicio.php">Inicio</a></li>
-              <li><a href="prestamos.php">Prestamos</a></li>
+             <li class="dropdown">
+                <a href="prestamos.php" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prestamos<span class="caret"></span></a>
+                   
+              <ul class="dropdown-menu">
+                 <li><a href="prestamos.php">Historial</a></li>
+
+                <li><a href="prestados.php">Prestados</a></li>
+                <li><a href="devueltos.php">Devueltos</a></li>
+              </ul>
+            </li>
+
+
+
               <li class="dropdown">
+
+              
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Libros<span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="libros.php">Libros</a></li>
@@ -174,23 +197,21 @@
         <form id="formUsuarios" method="post" action="procesarUsuarios.php">
           <div class="form-group">
             <label for="usua_documento">Documento</label>
-            <input type="text" class="form-control" id="usua_documento" name="usua_documento" placeholder="Documento" value="" style="text-transform:uppercase">
+            <input type="text" class="form-control" id="usua_documento" name="usua_documento" placeholder="Documento" value="<?php echo $id_usuario?>" readonly>
           </div>
           <div class="form-group">
             <label for="usua_nombre">Nombre</label>
-            <input type="text" class="form-control" id="usua_nombre " name="usua_nombre" placeholder="Nombre" required value="" style="text-transform:uppercase">
+            <input type="text" class="form-control" id="usua_nombre " name="usua_nombre" placeholder="Nombre" required value="" style="text-transform:Null">
+            <input type="hidden" class="form-control" id="modificar" name="modificar" required value="">
           </div>
           <div class="form-group">
             <label for="usua_apellido">Apellido</label>
-            <input type="text" class="form-control" id="usua_apellido" name="usua_apellido" placeholder="Apellido" required value="" style="text-transform:uppercase">
+            <input type="text" class="form-control" id="usua_apellido" name="usua_apellido" placeholder="Apellido" required value="" style="text-transform:Null">
+            <input type="hidden" class="form-control" id="modificar" name="modificar" required value="">
           </div>
           <div class="form-group">
             <label for="usua_nacimiento">Nacimiento</label>
             <input type="date" class="form-control" id="usua_nacimiento" name="usua_nacimiento" placeholder="Nacimiento" required value="" style="text-transform:uppercase">
-          </div>
-          <div class="form-group">
-            <label for="usua_contac">Contacto</label>
-            <input type="text" class="form-control" id="usua_contac" name="usua_contac" placeholder="Contacto" required value="" style="text-transform:uppercase">
             <input type="hidden" class="form-control" id="modificar" name="modificar" required value="">
           </div>
           <div class="form-group">

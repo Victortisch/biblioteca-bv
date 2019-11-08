@@ -44,7 +44,13 @@
     while($row = mysql_fetch_array($results)) {
 
         $accion = '<a href="#" class="edit" data-toggle="modal" data-target="#myModal" id='.$row['auto_codigo'].'><i class="fa fa-edit"> Editar </i></a><a href="eliminarAutores.php?auto_codigo='.$row['auto_codigo'].'"> <i class="fa fa-trash"> Eliminar</i></a>';
-        $add = array("0" => $row["auto_codigo"],"1" => $row["auto_nombre"],"2" => $row["auto_apellido"],"3" => $accion,"id_autor" => $row["auto_codigo"],"auto_nombre" => $row["auto_nombre"],"auto_apellido" => $row['auto_apellido'],"3" => $accion);
+        $add = array("0" => $row["auto_codigo"],
+          "1" => utf8_encode($row["auto_nombre"]),
+          "2" => utf8_encode($row["auto_apellido"]),
+          "3" => $accion,"id_autor" => $row["auto_codigo"],
+          "auto_nombre" => $row["auto_nombre"],
+          "auto_apellido" => $row['auto_apellido'],
+          "3" => $accion);
         
         $encode[]=$add;
     }
@@ -65,37 +71,26 @@
       $(document).ready(function() {
         var table = $('#example').DataTable({
           //"iDisplayLength": 50,
-          data: dataSet,
-          columns: [
-            { title: "Codigo" },
-            { title: "Nombre" },
-            { title: "Apellido" },
-            { title: "Operaciones" }
-          ]
-        });
+            data: dataSet,
+            columns: [
+                { title: "Codigo" },
+                { title: "Nombre" },
+                { title: "Apellido" },
+                { title: "Operaciones" }
 
+            ]
+        } );
         $('#example tbody').on('click', 'tr', function () {
-          var data = table.row( this ).data();
-
-          $('#formAutor input[name="id_autor"]').val(data[0]);
-          $('#formAutor input[name="auto_nombre"]').val(data[1]);
-          $('#formAutor input[name="auto_apellido"]').val(data[2]);
-          $('#formAutor input[name="modificar"]').val(true);
-          
-          var dep=data[1];
-          $("#departamento option").each(function() { this.selected = (this.text == dep); });        
-        });
-
-        //Cambiar valores del formulario para poder agregar un nuevo autor
-        $('#nuevo_autor').on('click', function() {
-          $('#formAutor input[name="id_autor"]').val("<?php echo $id_autor ?>");
-          $('#formAutor input[name="auto_nombre"]').val('');
-          $('#formAutor input[name="auto_apellido"]').val('');
-          $('#formAutor input[name="modificar"]').val(false);
-        });
+        var data = table.row( this ).data();
+        $('#formAutor input[name="id_autor"]').val(data[0]);
+        $('#formAutor input[name="auto_nombre"]').val(data[1]);
+        $('#formAutor input[name="auto_apellido"]').val(data[2]);
+        $('#formAutor input[name="modificar"]').val(true);
+        var dep=data[1];
+        $("#departamento option").each(function() { this.selected = (this.text == dep); });
         
-      });
-
+    } );
+    } );
     </script>
   </head>
 
@@ -118,7 +113,16 @@
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
               <li><a href="inicio.php">Inicio</a></li>
-              <li><a href="prestamos.php">Prestamos</a></li>
+              <li class="dropdown">
+                <a href="prestamos.php" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prestamos<span class="caret"></span></a>
+                   
+              <ul class="dropdown-menu">
+                 <li><a href="prestamos.php">Historial</a></li>
+
+                <li><a href="prestados.php">Prestados</a></li>
+                <li><a href="devueltos.php">Devueltos</a></li>
+              </ul>
+            </li>
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Libros<span class="caret"></span></a>
               <ul class="dropdown-menu">
@@ -146,7 +150,7 @@
         </div><!--/.container-fluid -->
       </nav>
         <div class="jumbotron" style="padding-top:2px;padding-bottom:2px;padding-left:15px;padding-right:15px;margin-top:5px;margin-bottom:15px">
-            <h2 style="margin-top:10px">Autores <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal" id="nuevo_autor">
+            <h2 style="margin-top:10px">Autores <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal">
   Agregar
 </button></h2>
         </div>
@@ -168,12 +172,12 @@
           </div>
           <div class="form-group">
             <label for="auto_nombre">Nombre</label>
-            <input type="text" class="form-control" id="auto_nombre" name="auto_nombre" placeholder="Nombre" required value="" style="text-transform:uppercase">
+            <input type="text" class="form-control" id="auto_nombre" name="auto_nombre" placeholder="Nombre" required value="" style="text-transform: Capitalize">
             <input type="hidden" class="form-control" id="modificar" name="modificar" required value="">
           </div>
           <div class="form-group">
             <label for="auto_apellido">Apellido</label>
-            <input type="text" class="form-control" id="auto_apellido" name="auto_apellido" placeholder="Apellido" required value="" style="text-transform:uppercase">
+            <input type="text" class="form-control" id="auto_apellido" name="auto_apellido" placeholder="Apellido" required value="" style="text-transform: Capitalize">
           </div>
           <div id="errorMessage">
           </div>

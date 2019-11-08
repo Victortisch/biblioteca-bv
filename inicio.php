@@ -49,7 +49,21 @@
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
               <li><a href="inicio.php">Inicio</a></li>
-              <li><a href="prestamos.php">Prestamos</a></li>
+
+
+              <li class="dropdown">
+                <a href="prestamos.php" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prestamos<span class="caret"></span></a>
+                   
+              <ul class="dropdown-menu">
+              	 <li><a href="prestamos.php">Historial</a></li>
+
+                <li><a href="prestados.php">Prestados</a></li>
+                <li><a href="devueltos.php">Devueltos</a></li>
+              </ul>
+            </li>
+
+
+
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Libros<span class="caret"></span></a>
               <ul class="dropdown-menu">

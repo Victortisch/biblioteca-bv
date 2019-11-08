@@ -59,8 +59,8 @@
           "1" => $row["pres_fecha_s"],
           "2" => $row["pres_plazo"],
           "3" => $row["pres_fecha_d"],
-          "4" => $row["usua_nombre"],
-          "5" => $row["libr_nombre"],
+          "4" => utf8_encode($row["usua_nombre"]),
++         "5" => utf8_encode($row["libr_nombre"]),
           "6" => $row["usua_contac"],
           "7" => $accion,"id_prestamo" => $row["pres_codigo"],
           "pres_fecha_s" => $row["pres_fecha_s"],
@@ -76,13 +76,11 @@
 
     $usuarios =mysql_query('SELECT usua_documento, usua_nombre, usua_contac FROM usuarios',$link);
     while ($row1 = mysql_fetch_array($usuarios)) {
-    $selectUsuarios.="<option value='".$row1['usua_documento']."'>".$row1['usua_nombre']."</option>";
-    }
++    $selectUsuarios.="<option value='".$row1['usua_documento']."'>".utf8_encode($row1['usua_nombre'])."</option>";    }
 
     $libros = mysql_query('SELECT libr_codigo, libr_nombre FROM libros',$link);
     while ($row2 = mysql_fetch_array($libros)) {
-    $selectLibros.="<option value='".$row2['libr_codigo']."'>".$row2['libr_nombre']."</option>";
-    }
++    $selectLibros.="<option value='".$row2['libr_codigo']."'>".utf8_encode($row2['libr_nombre'])."</option>";    }
 
     $consulta =mysql_query('SELECT MAX(pres_codigo) as max from prestamos',$link);
     while ($ruw = mysql_fetch_array($consulta)) {

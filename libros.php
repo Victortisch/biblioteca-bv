@@ -57,42 +57,56 @@
         else {
           $prestar = '<i class="fa fa-ban"> Prestado';
         }
-        $add = array("0" => $row["libr_codigo"],"1" => $row["libr_nombre"],"2" => $row["gene_descripcion"],"3" => $row["auto_nombre"],"4" => $row["tili_descripcion"],"5" => $row["orli_descripcion"],"6" => $accion,"7" => $prestar,"id_libro" => $row["libr_codigo"],"libr_nombre" => $row["libr_nombre"],"generos" => $row['gene_descripcion'],"autores" => $row['auto_nombre'],"tipos_libros" => $row['tili_descripcion'],"origenes_libros" => $row['orli_descripcion'],"6" => $accion,"7" => $prestar);
+        $add = array("0" => $row["libr_codigo"],
+          "1" => utf8_encode($row["libr_nombre"]),
+          "2" => utf8_encode($row["gene_descripcion"]),
+          "3" => utf8_encode($row["auto_nombre"]),
+          "4" =>utf8_encode( $row["tili_descripcion"]),
+          "5" =>utf8_encode($row["orli_descripcion"]),
+          "6" => $accion,
+          "7" => $prestar,"id_libro" => $row["libr_codigo"],
+          "libr_nombre" => $row["libr_nombre"],
+          "generos" => $row['gene_descripcion'],
+          "autores" => $row['auto_nombre'],
+          "tipos_libros" => $row['tili_descripcion']
+          ,"origenes_libros" => $row['orli_descripcion'],
+          "6" => $accion,"7" => $prestar);
         
         $encode[]=$add;
     }
 
     $usuarios =mysql_query('SELECT usua_documento, usua_nombre FROM usuarios',$link);
     while ($row1 = mysql_fetch_array($usuarios)) {
-    $selectUsuarios.="<option value='".$row1['usua_documento']."'>".$row1['usua_nombre']."</option>";
+    $selectUsuarios.="<option value='".$row1['usua_documento']."'>".utf8_encode($row1['usua_nombre'])."</option>";
     }
 
     $libros = mysql_query('SELECT libr_codigo, libr_nombre FROM libros',$link);
     while ($row2 = mysql_fetch_array($libros)) {
-    $selectLibros.="<option value='".$row2['libr_codigo']."'>".$row2['libr_nombre']."</option>";
+    $selectLibros.="<option value='".$row2['libr_codigo']."'>".utf8_encode($row2['libr_nombre'])."</option>";
     }
 
     $consulta =mysql_query('SELECT MAX(pres_codigo) as max from prestamos',$link);
     while ($raw = mysql_fetch_array($consulta)) {
     $id_prestamo=$raw['max']+1;
     }
+    //aqui esta la ventana modal de agregar
 
     $generos = mysql_query('SELECT gene_codigo, gene_descripcion FROM generos',$link);
     while($row10 = mysql_fetch_array($generos)) { 
-    $selectGeneros.="<option value='".$row10['gene_codigo']."'>".$row10['gene_descripcion']."</option>";
+    $selectGeneros.="<option value='".$row10['gene_codigo']."'>".utf8_encode($row10['gene_descripcion'])."</option>";
     }
 
     $autores = mysql_query("SELECT auto_codigo,CONCAT(auto_nombre, ' ', auto_apellido) As auto_nombre FROM autores",$link);
     while($row1 = mysql_fetch_array($autores)) { 
-    $selectAutores.="<option value='".$row1['auto_codigo']."'>".$row1['auto_nombre']."</option>";
+    $selectAutores.="<option value='".$row1['auto_codigo']."'>".utf8_encode($row1['auto_nombre'])."</option>";
     }
     $tipos_libros = mysql_query('SELECT tili_codigo, tili_descripcion FROM tipos_libros',$link);
     while($row2 = mysql_fetch_array($tipos_libros)) { 
-    $selectTiposLibros.="<option value='".$row2['tili_codigo']."'>".$row2['tili_descripcion']."</option>";
+    $selectTiposLibros.="<option value='".$row2['tili_codigo']."'>".utf8_encode($row2['tili_descripcion'])."</option>";
     }
     $origenes_libros = mysql_query('SELECT orli_codigo, orli_descripcion FROM origenes_libros',$link);
     while($row3 = mysql_fetch_array($origenes_libros)) { 
-    $selectOrigenesLibros.="<option value='".$row3['orli_codigo']."'>".$row3['orli_descripcion']."</option>";
+    $selectOrigenesLibros.="<option value='".$row3['orli_codigo']."'>".utf8_encode($row3['orli_descripcion'])."</option>";
     }
 
     $consulta = mysql_query('SELECT MAX(libr_codigo) as max from libros',$link);
@@ -101,6 +115,9 @@
     }
     ?>
     <script>
+
+
+
     var dataSet = <?php echo json_encode($encode);?>;
       $(document).ready(function() {
         var table = $('#example').DataTable({
@@ -167,8 +184,20 @@
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
               <li><a href="inicio.php">Inicio</a></li>
-              <li><a href="prestamos.php">Prestamos</a></li>
+
               <li class="dropdown">
+                <a href="prestamos.php" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prestamos<span class="caret"></span></a>
+                   
+              <ul class="dropdown-menu">
+                 <li><a href="prestamos.php">Historial</a></li>
+
+                <li><a href="prestados.php">Prestados</a></li>
+                <li><a href="devueltos.php">Devueltos</a></li>
+              </ul>
+            </li>
+             <li class="dropdown">
+                
+
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Libros<span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="libros.php">Libros</a></li>
@@ -195,7 +224,7 @@
         </div><!--/.container-fluid -->
       </nav>
         <div class="jumbotron" style="padding-top:2px;padding-bottom:2px;padding-left:15px;padding-right:15px;margin-top:5px;margin-bottom:15px">
-            <h2 style="margin-top:10px">Libros <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal" id=nuevo_libro>
+            <h2 style="margin-top:10px">Libros <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal">
   Agregar
 </button></h2>
         </div>
@@ -217,7 +246,7 @@
           </div>
           <div class="form-group">
             <label for="libr_nombre">Libro</label>
-            <input type="text" class="form-control" id="libr_nombre" name="libr_nombre" placeholder="Libro" required value="" style="text-transform:uppercase">
+            <input type="text" class="form-control" id="libr_nombre" name="libr_nombre" placeholder="Libro" required value="" style="text-transform:null">
             <input type="hidden" class="form-control" id="modificar" name="modificar" required value="">
           </div>
           <div class="form-group">
@@ -301,12 +330,12 @@
           </div>
           <div class="form-group">
             <label for="pres_fecha_s">Fecha de salida</label>
-            <input type="date" value="<?php echo date('Y-m-d'); ?>" class="form-control" id="pres_fecha_s" name="pres_fecha_s" placeholder="Fecha de Salida" required style="text-transform:uppercase">
+            <input type="date" value="<?php echo date('Y-m-d'); ?>" class="form-control" id="pres_fecha_s" name="pres_fecha_s" placeholder="Fecha de Salida" required style="text-transform:null">
             <input type="hidden" class="form-control" id="pagina" name="pagina" required value="libros.php">
           </div>
           <div class="form-group">
             <label for="pres_plazo">Plazo</label>
-            <input type="text" class="form-control" id="pres_plazo" name="pres_plazo" placeholder="Plazo" required value="7" style="text-transform:uppercase">
+            <input type="text" class="form-control" id="pres_plazo" name="pres_plazo" placeholder="Plazo" required value="7" style="text-transform:null">
           </div>
           <div id="errorMessage">
           </div>

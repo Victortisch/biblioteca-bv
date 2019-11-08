@@ -44,14 +44,14 @@
     while ($row = mysql_fetch_array($results)) {
 
         $accion = '<a href="#" class="edit" data-toggle="modal" data-target="#myModal" id='.$row['carr_codigo'].'><i class="fa fa-edit"> Editar </i></a><a href="eliminarCarrera.php?carr_codigo='.$row['carr_codigo'].'"> <i class="fa fa-trash"> Eliminar</i></a>';
-        $add = array("0" => $row["carr_codigo"],"1" => $row["carr_descripcion"],"2" => $row["facu_descripcion"],"3" => $accion,"id_carrera" => $row["carr_codigo"],"carr_descripcion" => $row["carr_descripcion"],"facu_descripcion" => $row['facu_descripcion'],"3" => $accion);
+        $add = array("0" => $row["carr_codigo"],"1" => utf8_encode($row["carr_descripcion"]),"2" => utf8_encode($row["facu_descripcion"]),"3" => $accion,"id_carrera" => $row["carr_codigo"],"carr_descripcion" => $row["carr_descripcion"],"facu_descripcion" => $row['facu_descripcion'],"3" => $accion);
         
         $encode[]=$add;
     }
 
     $facultades = mysql_query('SELECT facu_codigo, facu_descripcion FROM facultades', $link);
     while ($row1 = mysql_fetch_array($facultades)) {
-    $selectFacultades.="<option value='".$row1['facu_codigo']."'>".$row1['facu_descripcion']."</option>";
+    $selectFacultades.="<option value='".$row1['facu_codigo']."'>".utf8_encode($row1['facu_descripcion'])."</option>";
     }
 
     $consulta = mysql_query('SELECT MAX(carr_codigo) as max from carreras', $link);
@@ -112,8 +112,22 @@
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
               <li><a href="inicio.php">Inicio</a></li>
-              <li><a href="prestamos.php">Prestamos</a></li>
+ <li class="dropdown">
+                <a href="prestamos.php" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prestamos<span class="caret"></span></a>
+                   
+              <ul class="dropdown-menu">
+                 <li><a href="prestamos.php">Historial</a></li>
+
+                <li><a href="prestados.php">Prestados</a></li>
+                <li><a href="devueltos.php">Devueltos</a></li>
+              </ul>
+            </li>
+
+
+
               <li class="dropdown">
+
+
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Libros<span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="libros.php">Libros</a></li>
@@ -139,7 +153,7 @@
         </div><!--/.container-fluid -->
       </nav>
         <div class="jumbotron" style="padding-top:2px;padding-bottom:2px;padding-left:15px;padding-right:15px;margin-top:5px;margin-bottom:15px">
-            <h2 style="margin-top:10px">Carreras <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal" id="nueva_carr">
+            <h2 style="margin-top:10px">Carreras <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal">
   Agregar
 </button></h2>
         </div>
@@ -161,7 +175,7 @@
           </div>
           <div class="form-group">
             <label for="carr_descripcion">Carrera</label>
-            <input type="text" class="form-control" id="carr_descripcion" name="carr_descripcion" placeholder="carrera" required value="" style="text-transform:uppercase">
+            <input type="text" class="form-control" id="carr_descripcion" name="carr_descripcion" placeholder="carrera" required value="" style="text-transform:null">
             <input type="hidden" class="form-control" id="modificar" name="modificar" required value="">
           </div>
           <div class="form-group">

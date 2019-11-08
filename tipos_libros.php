@@ -44,7 +44,11 @@
     while ($row = mysql_fetch_array($results)) {
 
         $accion = '<a href="#" class="edit" data-toggle="modal" data-target="#myModal" id='.$row['tili_codigo'].'><i class="fa fa-edit"> Editar </i></a><a href="eliminarTiposLibros.php?tili_codigo='.$row['tili_codigo'].'"> <i class="fa fa-trash"> Eliminar</i></a>';
-        $add = array("0" => $row["tili_codigo"],"1" => $row["tili_descripcion"],"2" => $accion,"id_tipo_libro" => $row["tili_codigo"],"tili_descripcion" => $row["tili_descripcion"],"2" => $accion);
+        $add = array("0" => $row["tili_codigo"],
+          "1" => utf8_encode($row["tili_descripcion"]),
+          "2" => $accion,"id_tipo_libro" => $row["tili_codigo"],
+          "tili_descripcion" => $row["tili_descripcion"],
+          "2" => $accion);
         
         $encode[]=$add;
     }
@@ -104,8 +108,29 @@
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
               <li><a href="inicio.php">Inicio</a></li>
-              <li><a href="prestamos.php">Prestamos</a></li>
+               <li class="dropdown">
+                <a href="prestamos.php" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prestamos<span class="caret"></span></a>
+                   
+              <ul class="dropdown-menu">
+                 <li><a href="prestamos.php">Historial</a></li>
+
+                <li><a href="prestados.php">Prestados</a></li>
+                <li><a href="devueltos.php">Devueltos</a></li>
+              </ul>
+            </li>
+
+
+
               <li class="dropdown">
+
+
+
+
+
+
+
+
+
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Libros<span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="libros.php">Libros</a></li>
@@ -132,7 +157,7 @@
         </div><!--/.container-fluid -->
       </nav>
         <div class="jumbotron" style="padding-top:2px;padding-bottom:2px;padding-left:15px;padding-right:15px;margin-top:5px;margin-bottom:15px">
-            <h2 style="margin-top:10px">Tipos de Libros <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal" id="nuevo_tipo">
+            <h2 style="margin-top:10px">Tipos de Libros <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal">
   Agregar
 </button></h2>
         </div>
@@ -154,7 +179,7 @@
           </div>
            <div class="form-group">
             <label for="tili_descripcion">Tipo de Libro</label>
-            <input type="text" class="form-control" id="tili_descripcion" name="tili_descripcion" placeholder="Tipo de Libro" required value="" style="text-transform:uppercase">
+            <input type="text" class="form-control" id="tili_descripcion" name="tili_descripcion" placeholder="Tipo de Libro" required value="" style="text-transform:null">
             <input type="hidden" class="form-control" id="modificar" name="modificar" required value="">
           </div>
           <div id="errorMessage">
