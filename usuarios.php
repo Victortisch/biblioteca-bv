@@ -39,7 +39,7 @@
     global $selectCarreras;
     global $id_usuario;
 
-    $results=mysql_query("select u.usua_documento,u.usua_nombre,u.usua_apellido,u.usua_nacimiento,c.carr_descripcion from usuarios u, carreras c where u.carreras_carr_codigo = c.carr_codigo",$link);
+    $results=mysql_query("select u.usua_documento,u.usua_nombre,u.usua_apellido,u.usua_nacimiento,u.usua_contac,c.carr_descripcion from usuarios u, carreras c where u.carreras_carr_codigo = c.carr_codigo",$link);
 
     //$results = $bd->query('SELECT ciudades.id_ciudad, carreras.carrera, ciudades.ciudad FROM ciudades, carreras where ciudades.id_carrera=carreras.id_carrera and ciudades.deleted<>1');
     while ($row = mysql_fetch_array($results)) {
@@ -212,6 +212,11 @@
           <div class="form-group">
             <label for="usua_nacimiento">Nacimiento</label>
             <input type="date" class="form-control" id="usua_nacimiento" name="usua_nacimiento" placeholder="Nacimiento" required value="" style="text-transform:uppercase">
+            <input type="hidden" class="form-control" id="modificar" name="modificar" required value="">
+          </div>
+		  <div class="form-group">
+            <label for="usua_contac">Contacto</label>
+            <input type="text" class="form-control" id="usua_contac" name="usua_contac" placeholder="Contacto" required value="" style="text-transform:uppercase">
             <input type="hidden" class="form-control" id="modificar" name="modificar" required value="">
           </div>
           <div class="form-group">
