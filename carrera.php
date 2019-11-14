@@ -76,7 +76,7 @@
           var data = table.row( this ).data();
           $('#formCarreras input[name="id_carrera"]').val(data[0]);
           $('#formCarreras input[name="carr_descripcion"]').val(data[1]);
-          $('#formCarreras input[name="modificar"]').val(true);
+          $('#formCarreras input[name="modificar"]').val(1);
           var fac=data[2];
           $("#facultades option").each(function() { this.selected = (this.text == fac); });
         });
@@ -85,7 +85,7 @@
         $('#nueva_carr').on('click', function() {
           $('#formCarreras input[name="id_carrera"]').val("<?php echo $id_carrera ?>");
           $('#formCarreras input[name="carr_descripcion"]').val('');
-          $('#formCarreras input[name="modificar"]').val(false);
+          $('#formCarreras input[name="modificar"]').val(0);
           $("#facultades")[0].selectedIndex = 0;
         });
 
@@ -112,9 +112,9 @@
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
               <li><a href="inicio.php">Inicio</a></li>
- <li class="dropdown">
+              <li class="dropdown">
                 <a href="prestamos.php" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prestamos<span class="caret"></span></a>
-                   
+
               <ul class="dropdown-menu">
                  <li><a href="prestamos.php">Historial</a></li>
 
@@ -122,12 +122,7 @@
                 <li><a href="devueltos.php">Devueltos</a></li>
               </ul>
             </li>
-
-
-
               <li class="dropdown">
-
-
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Libros<span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="libros.php">Libros</a></li>
@@ -153,7 +148,7 @@
         </div><!--/.container-fluid -->
       </nav>
         <div class="jumbotron" style="padding-top:2px;padding-bottom:2px;padding-left:15px;padding-right:15px;margin-top:5px;margin-bottom:15px">
-            <h2 style="margin-top:10px">Carreras <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal">
+            <h2 style="margin-top:10px">Carreras <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal" id="nueva_carr">
   Agregar
 </button></h2>
         </div>
@@ -175,7 +170,7 @@
           </div>
           <div class="form-group">
             <label for="carr_descripcion">Carrera</label>
-            <input type="text" class="form-control" id="carr_descripcion" name="carr_descripcion" placeholder="carrera" required value="" style="text-transform:null">
+            <input type="text" class="form-control" id="carr_descripcion" name="carr_descripcion" placeholder="carrera" required value="">
             <input type="hidden" class="form-control" id="modificar" name="modificar" required value="">
           </div>
           <div class="form-group">

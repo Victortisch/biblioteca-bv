@@ -59,8 +59,8 @@
           "1" => $row["pres_fecha_s"],
           "2" => $row["pres_plazo"],
           "3" => $row["pres_fecha_d"],
-          "4" => utf8_encode($row["usua_nombre"]),
-          "5" => utf8_encode($row["libr_nombre"]),
+          "4" => $row["usua_nombre"],
+          "5" => $row["libr_nombre"],
           "6" => $accion,"id_prestamo" => $row["pres_codigo"],
           "pres_fecha_s" => $row["pres_fecha_s"],
           "pres_plazo" => $row['pres_plazo'],
@@ -74,12 +74,12 @@
 
     $usuarios =mysql_query('SELECT usua_documento, usua_nombre FROM usuarios',$link);
     while ($row1 = mysql_fetch_array($usuarios)) {
-    $selectUsuarios.="<option value='".$row1['usua_documento']."'>".utf8_encode($row1['usua_nombre'])."</option>";
+    $selectUsuarios.="<option value='".$row1['usua_documento']."'>".$row1['usua_nombre']."</option>";
     }
 
     $libros = mysql_query('SELECT libr_codigo, libr_nombre FROM libros',$link);
     while ($row2 = mysql_fetch_array($libros)) {
-    $selectLibros.="<option value='".$row2['libr_codigo']."'>".utf8_encode($row2['libr_nombre'])."</option>";
+    $selectLibros.="<option value='".$row2['libr_codigo']."'>".$row2['libr_nombre']."</option>";
     }
 
     $consulta =mysql_query('SELECT MAX(pres_codigo) as max from prestamos',$link);
@@ -143,9 +143,11 @@
             <ul class="nav navbar-nav">
             <li><a href="inicio.php">Inicio</a></li>
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prestamos<span class="caret"></span></a>
+                <a href="prestamos.php" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prestamos<span class="caret"></span></a>
+
               <ul class="dropdown-menu">
                  <li><a href="prestamos.php">Historial</a></li>
+
                 <li><a href="prestados.php">Prestados</a></li>
                 <li><a href="devueltos.php">Devueltos</a></li>
               </ul>

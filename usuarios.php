@@ -61,6 +61,7 @@
           "carreras" => $row['carr_descripcion'],
           "6" => $accion
         );
+        
         $encode[]=$add;
     }
 
@@ -85,7 +86,7 @@
                 { title: "Nombre" },
                 { title: "Apellido" },
                 { title: "Nacimiento" },
-				{ title: "Contacto" },
+                { title: "Contacto" },
                 { title: "Carrera" },
                 { title: "Operaciones" }
 
@@ -97,9 +98,9 @@
           $('#formUsuarios input[name="usua_nombre"]').val(data[1]);
           $('#formUsuarios input[name="usua_apellido"]').val(data[2]);
           $('#formUsuarios input[name="usua_nacimiento"]').val(data[3]);
-		  $('#formUsuarios input[name="usua_contac"]').val(data[4]);
-          $('#formUsuarios input[name="modificar"]').val(true);
-          var car=data[4];
+          $('#formUsuarios input[name="usua_contac"]').val(data[4]);
+          $('#formUsuarios input[name="modificar"]').val(1);
+          var car=data[5];
           $("#carreras option").each(function() { this.selected = (this.text == car); });
         });
 
@@ -109,7 +110,7 @@
           $('#formUsuarios input[name="usua_nombre"]').val('');
           $('#formUsuarios input[name="usua_apellido"]').val('');
           $('#formUsuarios input[name="usua_nacimiento"]').val('');
-		  $('#formUsuarios input[name="usua_contac"]').val('');
+          $('#formUsuarios input[name="usua_contac"]').val('');
           $('#formUsuarios input[name="modificar"]').val(0);
           $("#carreras")[0].selectedIndex = 0;
         });
@@ -137,9 +138,9 @@
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
             <li><a href="inicio.php">Inicio</a></li>
-             <li class="dropdown">
+              <li class="dropdown">
                 <a href="prestamos.php" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prestamos<span class="caret"></span></a>
-                   
+
               <ul class="dropdown-menu">
                  <li><a href="prestamos.php">Historial</a></li>
 
@@ -147,12 +148,7 @@
                 <li><a href="devueltos.php">Devueltos</a></li>
               </ul>
             </li>
-
-
-
               <li class="dropdown">
-
-              
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Libros<span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="libros.php">Libros</a></li>
@@ -179,7 +175,7 @@
         </div><!--/.container-fluid -->
       </nav>
         <div class="jumbotron" style="padding-top:2px;padding-bottom:2px;padding-left:15px;padding-right:15px;margin-top:5px;margin-bottom:15px">
-            <h2 style="margin-top:10px">Usuarios <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal">
+            <h2 style="margin-top:10px">Usuarios <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal" id="nuevo_usua">
   Agregar
 </button></h2>
         </div>
@@ -197,29 +193,26 @@
         <form id="formUsuarios" method="post" action="procesarUsuarios.php">
           <div class="form-group">
             <label for="usua_documento">Documento</label>
-            <input type="text" class="form-control" id="usua_documento" name="usua_documento" placeholder="Documento" value="<?php echo $id_usuario?>" readonly>
+            <input type="text" class="form-control" id="usua_documento" name="usua_documento" placeholder="Documento" value="" required>
           </div>
           <div class="form-group">
             <label for="usua_nombre">Nombre</label>
-            <input type="text" class="form-control" id="usua_nombre " name="usua_nombre" placeholder="Nombre" required value="" style="text-transform:Null">
-            <input type="hidden" class="form-control" id="modificar" name="modificar" required value="">
+            <input type="text" class="form-control" id="usua_nombre " name="usua_nombre" placeholder="Nombre" required value="">
           </div>
           <div class="form-group">
             <label for="usua_apellido">Apellido</label>
-            <input type="text" class="form-control" id="usua_apellido" name="usua_apellido" placeholder="Apellido" required value="" style="text-transform:Null">
-            <input type="hidden" class="form-control" id="modificar" name="modificar" required value="">
+            <input type="text" class="form-control" id="usua_apellido" name="usua_apellido" placeholder="Apellido" required value="">
           </div>
           <div class="form-group">
             <label for="usua_nacimiento">Nacimiento</label>
-            <input type="date" class="form-control" id="usua_nacimiento" name="usua_nacimiento" placeholder="Nacimiento" required value="" style="text-transform:uppercase">
-            <input type="hidden" class="form-control" id="modificar" name="modificar" required value="">
-          </div>
-		  <div class="form-group">
-            <label for="usua_contac">Contacto</label>
-            <input type="text" class="form-control" id="usua_contac" name="usua_contac" placeholder="Contacto" required value="" style="text-transform:uppercase">
+            <input type="date" class="form-control" id="usua_nacimiento" name="usua_nacimiento" placeholder="Nacimiento" required value="">
             <input type="hidden" class="form-control" id="modificar" name="modificar" required value="">
           </div>
           <div class="form-group">
+            <div class="form-group">
+            <label for="usua_contac">Contacto</label>
+            <input type="text" class="form-control" id="usua_contac" name="usua_contac" placeholder="Contacto" value="">
+          </div>
             <label for="carreras">Carrera</label>
                 <select class="form-control" name="carreras" id="carreras" required>
                   <option value="">Seleccionar</option>

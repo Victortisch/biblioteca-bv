@@ -2,7 +2,6 @@
 include 'conex.php';
 $link=Conectarse();
 
-
 $gene_codigo = $_POST['id_genero'];
 $gene_descripcion = utf8_decode ($_POST['gene_descripcion']);
 
@@ -17,6 +16,5 @@ else{
      	VALUES (".$gene_codigo.",'".$gene_descripcion."')",$link);
 }
 
-header("Location:generos.php");	
-mysql_set_charset('utf8');
+header("Location:generos.php");		
 ?>

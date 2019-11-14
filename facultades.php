@@ -44,11 +44,7 @@
     while ($row = mysql_fetch_array($results)) {
 
         $accion = '<a href="#" class="edit" data-toggle="modal" data-target="#myModal" id='.$row['facu_codigo'].'><i class="fa fa-edit"> Editar </i></a><a href="eliminarFacultades.php?facu_codigo='.$row['facu_codigo'].'"> <i class="fa fa-trash"> Eliminar</i></a>';
-        $add = array("0" => $row["facu_codigo"],
-          "1" => utf8_encode($row["facu_descripcion"]),
-          "2" => $accion,"id_facultad" => $row["facu_codigo"],
-          "facu_descripcion" => $row["facu_descripcion"],
-          "2" => $accion);
+        $add = array("0" => $row["facu_codigo"],"1" => $row["facu_descripcion"],"2" => $accion,"id_facultad" => $row["facu_codigo"],"facu_descripcion" => $row["facu_descripcion"],"2" => $accion);
         
         $encode[]=$add;
     }
@@ -115,9 +111,9 @@
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
             <li><a href="inicio.php">Inicio</a></li>
-             <li class="dropdown">
+              <li class="dropdown">
                 <a href="prestamos.php" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prestamos<span class="caret"></span></a>
-                   
+
               <ul class="dropdown-menu">
                  <li><a href="prestamos.php">Historial</a></li>
 
@@ -125,21 +121,7 @@
                 <li><a href="devueltos.php">Devueltos</a></li>
               </ul>
             </li>
-
-
-
               <li class="dropdown">
-
-
-
-
-
-
-
-
-
-
-
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Libros<span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="libros.php">Libros</a></li>
@@ -166,7 +148,7 @@
         </div><!--/.container-fluid -->
       </nav>
         <div class="jumbotron" style="padding-top:2px;padding-bottom:2px;padding-left:15px;padding-right:15px;margin-top:5px;margin-bottom:15px">
-            <h2 style="margin-top:10px">Facultades <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal">
+            <h2 style="margin-top:10px">Facultades <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal" id="nueva_fac">
   Agregar
 </button></h2>
         </div>
@@ -187,19 +169,14 @@
             <input type="text" class="form-control" id="id_facultad" name="id_facultad" placeholder="Código Facultad" value="<?php echo $id_facultad?>" readonly>
           </div>
           <div class="form-group">
-            <label for="facu_descripcion">Facultad</label>
-            <input type="text" class="form-control" id="facu_descripcion" name="facu_descripcion" placeholder="Facultad" required value="" style="text-transform:null">
+            <label for="facu_descripcion">Faculdad</label>
+            <input type="text" class="form-control" id="facu_descripcion" name="facu_descripcion" placeholder="Facultad" required value="">
             <input type="hidden" class="form-control" id="modificar" name="modificar" required value="">
-           
-             <!-- /hiddenesparamodificarperoocultado -->
           </div>
            <div id="errorMessage">
           </div>
       </div>
       <div class="modal-footer">
-      
-         <!-- /ipiedepaginacerraryguardar -->
-
         <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
         <button type="submit" class="btn btn-primary">Guardar</button>
       </div>

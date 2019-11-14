@@ -43,8 +43,7 @@
       p.pres_fecha_s,
       p.pres_plazo,
       u.usua_nombre,
-      l.libr_nombre,
-      u.usua_contac from prestamos p, usuarios u, libros l 
+      l.libr_nombre from prestamos p, usuarios u, libros l 
       where p.usuarios_usua_documento = u.usua_documento
       and p.libros_libr_codigo = l.libr_codigo
       and (pres_fecha_d is NULL or pres_fecha_d = '')",$link);
@@ -53,35 +52,33 @@
     //$results = $bd->query('SELECT ciudades.id_ciudad, departamentos.departamento, ciudades.ciudad FROM ciudades, departamentos where ciudades.id_departamento=departamentos.id_departamento and ciudades.deleted<>1');
     while ($row = mysql_fetch_array($results)) {
 
-        $accion = '<a href="#" class="edit" data-toggle="modal" data-target="#myModal" id='.$row['pres_codigo'].'>
-        <i class="fa fa-edit"> Editar</i></a><a href="devolver.php?pres_codigo='.$row['pres_codigo'].'"> 
+      $accion = '<a href="#" class="edit" data-toggle="modal" data-target="#myModal" id='.$row['pres_codigo'].'><i class="fa fa-edit"> Editar</i></a>
+        <a href="#" class="edit" data-toggle="modal" data-target="#modalDevolver" id='.$row['pres_codigo'].'> 
         <i class="fa fa-reply"> Devolver</i></a>';
         
         $add = array("0" => $row["pres_codigo"],
           "1" => $row["pres_fecha_s"],
           "2" => $row["pres_plazo"],
-          "3" => utf8_encode($row["usua_nombre"]),
-          "4" =>utf8_encode($row["libr_nombre"]) ,
-          "5" => $row["usua_contac"],
-          "6" => $accion,"id_prestamo" => $row["pres_codigo"],
+          "3" => $row["usua_nombre"],
+          "4" => $row["libr_nombre"],
+          "5" => $accion,"id_prestamo" => $row["pres_codigo"],
           "pres_fecha_s" => $row["pres_fecha_s"],
           "pres_plazo" => $row['pres_plazo'],
           "usuarios" => $row['usua_nombre'],
           "libros" => $row['libr_nombre'],
-          "usuarios" => $row['usua_contac'],
-          "6" => $accion);
+          "5" => $accion);
         
         $encode[]=$add;
     }
 
-    $usuarios =mysql_query('SELECT usua_documento, usua_nombre, usua_contac FROM usuarios',$link);
+    $usuarios =mysql_query('SELECT usua_documento, usua_nombre FROM usuarios',$link);
     while ($row1 = mysql_fetch_array($usuarios)) {
-    $selectUsuarios.="<option value='".$row1['usua_documento']."'>".utf8_encode($row1['usua_nombre'])."</option>";
+    $selectUsuarios.="<option value='".$row1['usua_documento']."'>".$row1['usua_nombre']."</option>";
     }
 
     $libros = mysql_query('SELECT libr_codigo, libr_nombre FROM libros',$link);
     while ($row2 = mysql_fetch_array($libros)) {
-    $selectLibros.="<option value='".$row2['libr_codigo']."'>".utf8_encode($row2['libr_nombre'])."</option>";
+    $selectLibros.="<option value='".$row2['libr_codigo']."'>".$row2['libr_nombre']."</option>";
     }
 
     $consulta =mysql_query('SELECT MAX(pres_codigo) as max from prestamos',$link);
@@ -101,26 +98,24 @@
                 { title: "Plazo" },
                 { title: "Usuario" },
                 { title: "Libro" },
-                { title: "Contacto" },
                 { title: "Operaciones" }
 
             ]
         } );
         $('#example tbody').on('click', 'tr', function () {
         var data = table.row( this ).data();
-        $('#formPrestamos input[name="id_prestamo"]').val(data[0]);
+        $('input[name="id_prestamo"]').val(data[0]); // modificar id_prestamo de ambos modales
         $('#formPrestamos input[name="pres_fecha_s"]').val(data[1]);
         $('#formPrestamos input[name="pres_plazo"]').val(data[2]);
         $('#formPrestamos input[name="modificar"]').val(true);
-
+        $('#nombre_libro').text(`Confirmar devolución del libro "${data[4]}"`); 
+        // escribir mensaje al confirmar devolución
 
         var usuario=data[3];
         $("#usuarios option").each(function() { this.selected = (this.text == usuario); });
         var libro=data[4];
         $("#libros option").each(function() { this.selected = (this.text == libro); });
-        var usuario=data[5];
-        $("#usuarios option").each(function() { this.selected = (this.text == usuario); });
-
+        
     } );
     } );
       //segunda clase
@@ -141,14 +136,17 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="inicio.php">Biblioteca</a>
+            <a class="navbar-brand" href="#">Biblioteca</a>
           </div>
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
             <li><a href="inicio.php">Inicio</a></li>
               <li class="dropdown">
                 <a href="prestamos.php" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prestamos<span class="caret"></span></a>
+
               <ul class="dropdown-menu">
+                 <li><a href="prestamos.php">Historial</a></li>
+
                 <li><a href="prestados.php">Prestados</a></li>
                 <li><a href="devueltos.php">Devueltos</a></li>
               </ul>
@@ -180,10 +178,94 @@
         </div><!--/.container-fluid -->
       </nav>
         <div class="jumbotron" style="padding-top:2px;padding-bottom:2px;padding-left:15px;padding-right:15px;margin-top:5px;margin-bottom:15px">
-            <h2 style="margin-top:10px">Prestados </h2>
+            <h2 style="margin-top:10px">Préstamos <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal">
+  Agregar
+</button></h2>
         </div>
+        <!-- Button trigger modal -->
 
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Nuevo préstamo<span id="load" style="display:none"> <img src="img/loading.gif"> Cargando...</span></h4>
+      </div>
+      <div class="modal-body">
+        <form id="formPrestamos" method="post" action="procesarPrestamos.php">
+
+          <div class="form-group">
+            <label for="id_prestamo">Código Préstamo</label>
+            <input type="text" class="form-control" id="id_prestamo" name="id_prestamo" placeholder="Código" value="<?php echo $id_prestamo?>" readonly>
+          </div>
+          <div class="form-group">
+            <label for="usuarios">Usuarios</label>
+                <select class="form-control" name="usuarios" id="usuarios" required>
+                  <option value="">Seleccionar</option>
+                    <?php
+                    echo $selectUsuarios;
+                    ?>
+                </select>
+          </div>
+          <div class="form-group">
+            <label for="libros">Libros</label>
+                <select class="form-control" name="libros" id="libros" required>
+                  <option value="">Seleccionar</option>
+                    <?php
+                    echo $selectLibros;
+                    ?>
+                </select>
+          </div>
+          <div class="form-group">
+            <label for="pres_fecha_s">Fecha de salida</label>
+            <input type="date" class="form-control" id="pres_fecha_s" name="pres_fecha_s" placeholder="Fecha de Salida" required value="<?php echo date('Y-m-d'); ?>" style="text-transform:uppercase">
+            <input type="hidden" class="form-control" id="pagina" name="pagina" required value="prestados.php">
+            <input type="hidden" class="form-control" id="modificar" name="modificar" required value="">
+          </div>
+          <div class="form-group">
+            <label for="pres_plazo">Plazo</label>
+            <input type="text" class="form-control" id="pres_plazo" name="pres_plazo" placeholder="Plazo" required value="7" style="text-transform:uppercase">
+          </div>
+          <div id="errorMessage">
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalDevolver" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Confirmación<span id="load" style="display:none"> <img src="img/loading.gif"> Cargando...</span></h4>
+      </div>
+      <div class="modal-body">
+        <form id="formDevolver" method="get" action="devolver.php">
+          <div class="form-group">
+            <p id="nombre_libro"></p>
+          </div>
+          <input type="hidden" class="form-control" name="id_prestamo" value="">
+          <div id="errorMessage">
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Aceptar</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
       <table id="example" class="display" width="100%"></table>
+
     </div>
      <!-- /container -->
 
