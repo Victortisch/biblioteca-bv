@@ -29,9 +29,7 @@
     while ($row = mysql_fetch_array($results)) {
         $accion = '<a href="#" class="edit" data-toggle="modal" data-target="#myModal" id='.$row['gene_codigo'].'><i class="fa fa-edit"> Editar </i></a><a href="eliminarGeneros.php?gene_codigo='.$row['gene_codigo'].'"> <i class="fa fa-trash"> Eliminar </i></a>';
           $add = array("0" => $row["gene_codigo"],
-          "1" => $row["gene_descripcion"],
-          "2" => $accion,"id_genero" => $row["gene_codigo"],
-          "gene_descripcion" => $row["gene_descripcion"],
+          "1" => utf8_encode($row["gene_descripcion"]),
           "2" => $accion);
 
         $encode[]=$add;
@@ -59,16 +57,17 @@
           var data = table.row( this ).data();
           $('#formGeneros input[name="id_genero"]').val(data[0]);
           $('#formGeneros input[name="gene_descripcion"]').val(data[1]);
-          $('#formGeneros input[name="modificar"]').val(true);
+          $('#formGeneros input[name="modificar"]').val(1);
         } );
 
         //Cambiar valores del formulario para poder agregar un nuevo género
         $('#nuevo_gen').on('click', function() {
           $('#formGeneros input[name="id_genero"]').val("<?php echo $id_genero ?>");
           $('#formGeneros input[name="gene_descripcion"]').val('');
-          $('#formGeneros input[name="modificar"]').val(false);
+          $('#formGeneros input[name="modificar"]').val(0);
         });
       });
+      <?php mysql_close($link); ?>
     </script>
   </head>
 
@@ -90,7 +89,7 @@
             <ul class="nav navbar-nav">
               <li><a href="inicio.php">Inicio</a></li>
               <li class="dropdown">
-                <a href="prestamos.php" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prestamos<span class="caret"></span></a>
+                <a href="prestamos.php" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prestamos <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="prestamos.php">Historial</a></li>
                 <li><a href="prestados.php">Prestados</a></li>
@@ -99,7 +98,7 @@
             </li>
 
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Libros<span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Libros <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="libros.php">Libros</a></li>
                 <li role="separator" class="divider"></li>
@@ -112,7 +111,7 @@
             </li>
 
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Usuarios<span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Usuarios <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                   <li><a href="facultades.php">Instituciones</a></li>
                   <li role="separator" class="divider"></li>

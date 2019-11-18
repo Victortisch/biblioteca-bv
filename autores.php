@@ -71,7 +71,7 @@
         });
       });
     </script>
-    <?php mysql_close($link); ?>
+    <?php mysql_close($link);?>
   </head>
 
   <body>
@@ -92,7 +92,7 @@
             <ul class="nav navbar-nav">
               <li><a href="inicio.php">Inicio</a></li>
               <li class="dropdown">
-                <a href="prestamos.php" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prestamos<span class="caret"></span></a>
+                <a href="prestamos.php" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prestamos <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="prestamos.php">Historial</a></li>
                 <li><a href="prestados.php">Prestados</a></li>
@@ -101,7 +101,7 @@
             </li>
 
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Libros<span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Libros <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="libros.php">Libros</a></li>
                 <li role="separator" class="divider"></li>
@@ -114,7 +114,7 @@
             </li>
 
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Usuarios<span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Usuarios <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                   <li><a href="facultades.php">Instituciones</a></li>
                   <li role="separator" class="divider"></li>

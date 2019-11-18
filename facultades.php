@@ -28,9 +28,7 @@
     while ($row = mysql_fetch_array($results)) {
         $accion = '<a href="#" class="edit" data-toggle="modal" data-target="#myModal" id='.$row['facu_codigo'].'><i class="fa fa-edit"> Editar </i></a><a href="eliminarFacultades.php?facu_codigo='.$row['facu_codigo'].'"> <i class="fa fa-trash"> Eliminar</i></a>';
         $add = array("0" => $row["facu_codigo"],
-        "1" => $row["facu_descripcion"],
-        "2" => $accion,"id_facultad" => $row["facu_codigo"],
-        "facu_descripcion" => $row["facu_descripcion"],
+        "1" => utf8_encode($row["facu_descripcion"]),
         "2" => $accion);
 
         $encode[]=$add;
@@ -58,7 +56,7 @@
           var data = table.row( this ).data();
           $('#formFacultad input[name="id_facultad"]').val(data[0]);
           $('#formFacultad input[name="facu_descripcion"]').val(data[1]);
-          $('#formFacultad input[name="modificar"]').val(true);
+          $('#formFacultad input[name="modificar"]').val(1);
           var dep=data[1];
           $("#departamento option").each(function() { this.selected = (this.text == dep); });
         });
@@ -67,7 +65,7 @@
         $('#nueva_fac').on('click', function() {
           $('#formFacultad input[name="id_facultad"]').val("<?php echo $id_facultad ?>");
           $('#formFacultad input[name="facu_descripcion"]').val('');
-          $('#formFacultad input[name="modificar"]').val(false);
+          $('#formFacultad input[name="modificar"]').val(0);
         });
       });
     </script>
@@ -91,7 +89,7 @@
             <ul class="nav navbar-nav">
               <li><a href="inicio.php">Inicio</a></li>
               <li class="dropdown">
-                <a href="prestamos.php" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prestamos<span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prestamos <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="prestamos.php">Historial</a></li>
                 <li><a href="prestados.php">Prestados</a></li>
@@ -100,7 +98,7 @@
             </li>
 
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Libros<span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Libros <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="libros.php">Libros</a></li>
                 <li role="separator" class="divider"></li>
@@ -113,7 +111,7 @@
             </li>
 
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Usuarios<span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Usuarios <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                   <li><a href="facultades.php">Instituciones</a></li>
                   <li role="separator" class="divider"></li>
@@ -159,6 +157,7 @@
       <table id="example" class="display" width="100%"></table>
     </div>
 
+    <script src="js/bootstrap.min.js"></script>
     <script src="js/ie10-viewport-bug-workaround.js"></script>
   </body>
 </html>

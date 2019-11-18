@@ -42,14 +42,8 @@
           "1" => $row["pres_fecha_s"],
           "2" => $row["pres_plazo"],
           "3" => $row["pres_fecha_d"],
-          "4" => $row["usua_nombre"],
-          "5" => $row["libr_nombre"],
-          "6" => $accion,"id_prestamo" => $row["pres_codigo"],
-          "pres_fecha_s" => $row["pres_fecha_s"],
-          "pres_plazo" => $row['pres_plazo'],
-          "pres_fecha_d" => $row['pres_fecha_d'],
-          "usuarios" => $row['usua_nombre'],
-          "libros" => $row['libr_nombre'],
+          "4" => utf8_encode($row["usua_nombre"]),
+          "5" => utf8_encode($row["libr_nombre"]),
           "6" => $accion);
 
         $encode[]=$add;
@@ -100,6 +94,7 @@
     } );
     } );
     </script>
+    <?php mysql_close($link); ?>
   </head>
 
   <body>
@@ -120,7 +115,7 @@
             <ul class="nav navbar-nav">
               <li><a href="inicio.php">Inicio</a></li>
               <li class="dropdown">
-                <a href="prestamos.php" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prestamos<span class="caret"></span></a>
+                <a href="prestamos.php" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prestamos <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="prestamos.php">Historial</a></li>
                 <li><a href="prestados.php">Prestados</a></li>
@@ -129,7 +124,7 @@
             </li>
 
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Libros<span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Libros <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="libros.php">Libros</a></li>
                 <li role="separator" class="divider"></li>
@@ -142,7 +137,7 @@
             </li>
 
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Usuarios<span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Usuarios <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                   <li><a href="facultades.php">Instituciones</a></li>
                   <li role="separator" class="divider"></li>
