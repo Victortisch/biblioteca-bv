@@ -28,13 +28,9 @@
     while($row = mysql_fetch_array($results)) {
         $accion = '<a href="#" class="edit" data-toggle="modal" data-target="#myModal" id='.$row['auto_codigo'].'><i class="fa fa-edit"> Editar </i></a><a href="eliminarAutores.php?auto_codigo='.$row['auto_codigo'].'"> <i class="fa fa-trash"> Eliminar</i></a>';
         $add = array("0" => $row["auto_codigo"],
-        "1" => $row["auto_nombre"],
-        "2" => $row["auto_apellido"],
-        "3" => $accion,
-        "id_autor" => $row["auto_codigo"],
-        "auto_nombre" => $row["auto_nombre"],
-        "auto_apellido" => $row['auto_apellido'],
-        "3" => $accion);
+        "1" => utf8_encode($row["auto_nombre"]),
+        "2" => utf8_encode($row["auto_apellido"]),
+        "3" => $accion,);
         $encode[]=$add;
     }
 
@@ -75,6 +71,7 @@
         });
       });
     </script>
+    <?php mysql_close($link); ?>
   </head>
 
   <body>
