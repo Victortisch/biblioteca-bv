@@ -1,77 +1,59 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
+    <title>Biblioteca UNAE</title>
     <meta http-equiv='Content-Type' content='text/html'; charset='UTF-8'/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
     <link rel="icon" href="img/favicon.ico">
-
-    <title>Biblioteca UNAE</title>
-    <!-- Table CSS -->
     <link rel="stylesheet" type="text/css" href="css/table_style.css">
-    <!-- Bootstrap core CSS -->
     <link href="css/font-awesome.css" rel="stylesheet" type="text/css">
     <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
     <link href="css/navbar.css" rel="stylesheet">
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    <meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
+    <link rel="stylesheet" type="text/css" href="css/jquery.dataTables.min.css">
     <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
     <script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/jquery.dataTables.min.css">
+
     <?php
-    
     include 'conex.php';
-
     $link=Conectarse();
-
     $encode=array();
     global $selectDepartamento;
     global $id_facultad;
-
     $results=mysql_query("select * from facultades",$link);
 
-    //$results = $bd->query('SELECT ciudades.id_ciudad, departamentos.departamento, ciudades.ciudad FROM ciudades, departamentos where ciudades.id_departamento=departamentos.id_departamento and ciudades.deleted<>1');
     while ($row = mysql_fetch_array($results)) {
-
         $accion = '<a href="#" class="edit" data-toggle="modal" data-target="#myModal" id='.$row['facu_codigo'].'><i class="fa fa-edit"> Editar </i></a><a href="eliminarFacultades.php?facu_codigo='.$row['facu_codigo'].'"> <i class="fa fa-trash"> Eliminar</i></a>';
-        $add = array("0" => $row["facu_codigo"],"1" => $row["facu_descripcion"],"2" => $accion,"id_facultad" => $row["facu_codigo"],"facu_descripcion" => $row["facu_descripcion"],"2" => $accion);
-        
+        $add = array("0" => $row["facu_codigo"],
+        "1" => $row["facu_descripcion"],
+        "2" => $accion,"id_facultad" => $row["facu_codigo"],
+        "facu_descripcion" => $row["facu_descripcion"],
+        "2" => $accion);
+
         $encode[]=$add;
     }
-
-    //$departamentos = $bd->query('SELECT id_departamento, departamento FROM departamentos');
-    //while ($raw = $departamentos->fetchArray()) {
-    //$selectDepartamento.="<option value='".$raw['id_departamento']."'>".$raw['departamento']."</option>";
-    //}
 
     $consulta = mysql_query('SELECT MAX(facu_codigo) as max from facultades',$link);
     while ($ruw = mysql_fetch_array($consulta)) {
     $id_facultad=$ruw['max']+1;
     }
     ?>
+
     <script>
     var dataSet = <?php echo json_encode($encode);?>;
       $(document).ready(function() {
         var table = $('#example').DataTable({
-          //"iDisplayLength": 50,
             data: dataSet,
             columns: [
                 { title: "Código" },
-                { title: "Facultad" },
+                { title: "Institución" },
                 { title: "Operaciones" }
-
             ]
         } );
+
         $('#example tbody').on('click', 'tr', function () {
           var data = table.row( this ).data();
           $('#formFacultad input[name="id_facultad"]').val(data[0]);
@@ -87,16 +69,12 @@
           $('#formFacultad input[name="facu_descripcion"]').val('');
           $('#formFacultad input[name="modificar"]').val(false);
         });
-
       });
     </script>
   </head>
 
-  <body class="dt-example">
-
+  <body>
     <div class="container">
-
-      <!-- Static navbar -->
       <nav class="navbar navbar-default">
         <div class="container-fluid">
           <div class="navbar-header">
@@ -108,19 +86,19 @@
             </button>
             <a class="navbar-brand" href="#">Biblioteca</a>
           </div>
+
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-            <li><a href="inicio.php">Inicio</a></li>
+              <li><a href="inicio.php">Inicio</a></li>
               <li class="dropdown">
                 <a href="prestamos.php" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Prestamos<span class="caret"></span></a>
-
               <ul class="dropdown-menu">
-                 <li><a href="prestamos.php">Historial</a></li>
-
+                <li><a href="prestamos.php">Historial</a></li>
                 <li><a href="prestados.php">Prestados</a></li>
                 <li><a href="devueltos.php">Devueltos</a></li>
               </ul>
             </li>
+
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Libros<span class="caret"></span></a>
               <ul class="dropdown-menu">
@@ -133,68 +111,54 @@
                 <li><a href="origenes_libros.php">Origenes de Libros</a></li>
               </ul>
             </li>
+
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Facultades<span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Usuarios<span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                  <li><a href="facultades.php">Facultades</a></li>
-                  <li><a href="carrera.php">Carreras</a></li>
+                  <li><a href="facultades.php">Instituciones</a></li>
                   <li role="separator" class="divider"></li>
                   <li><a href="usuarios.php">Usuarios</a></li>
             </ul>
           </li>
-          
-            
-          </div><!--/.nav-collapse -->
-        </div><!--/.container-fluid -->
+          </div>
+        </div>
       </nav>
         <div class="jumbotron" style="padding-top:2px;padding-bottom:2px;padding-left:15px;padding-right:15px;margin-top:5px;margin-bottom:15px">
-            <h2 style="margin-top:10px">Facultades <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal" id="nueva_fac">
-  Agregar
-</button></h2>
+            <h2 style="margin-top:10px">Instituciones <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal" id="nueva_fac">Agregar</button></h2>
         </div>
-        <!-- Button trigger modal -->
 
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Nueva Facultad <span id="load" style="display:none"> <img src="img/loading.gif"> Cargando...</span></h4>
-      </div>
-      <div class="modal-body">
-        <form id="formFacultad" method="post" action="procesarFacultades.php">
-          <div class="form-group">
-            <label for="id_facultad">Código Facultad</label>
-            <input type="text" class="form-control" id="id_facultad" name="id_facultad" placeholder="Código Facultad" value="<?php echo $id_facultad?>" readonly>
+      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="myModalLabel">Nueva Institución<span id="load" style="display:none"> <img src="img/loading.gif"> Cargando...</span></h4>
+            </div>
+            <div class="modal-body">
+              <form id="formFacultad" method="post" action="procesarFacultades.php">
+                <div class="form-group">
+                  <label for="id_facultad">Código de la Institución</label>
+                  <input type="text" class="form-control" id="id_facultad" name="id_facultad" placeholder="Código Facultad" value="<?php echo $id_facultad?>" readonly>
+                </div>
+                <div class="form-group">
+                  <label for="facu_descripcion">Institución</label>
+                  <input type="text" class="form-control" id="facu_descripcion" name="facu_descripcion" placeholder="Facultad" required value="">
+                  <input type="hidden" class="form-control" id="modificar" name="modificar" required value="">
+                </div>
+                 <div id="errorMessage">
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+              <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+            </form>
           </div>
-          <div class="form-group">
-            <label for="facu_descripcion">Faculdad</label>
-            <input type="text" class="form-control" id="facu_descripcion" name="facu_descripcion" placeholder="Facultad" required value="">
-            <input type="hidden" class="form-control" id="modificar" name="modificar" required value="">
-          </div>
-           <div id="errorMessage">
-          </div>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-        <button type="submit" class="btn btn-primary">Guardar</button>
-      </div>
-      </form>
-    </div>
-  </div>
-</div>
       <table id="example" class="display" width="100%"></table>
-
     </div>
-     <!-- /container -->
 
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="js/ie10-viewport-bug-workaround.js"></script>
   </body>
 </html>
