@@ -36,8 +36,8 @@
       and (pres_fecha_d is NULL or pres_fecha_d = '')",$link);
 
     while ($row = mysql_fetch_array($results)) {
-      $accion = '<a href="#" class="edit" data-toggle="modal" data-target="#modalDevolver" id='.$row['pres_codigo'].'>
-        <i class="fa fa-reply"> Devolver</i></a>';
+      $accion = '<a href="#" class="edit" data-toggle="modal" data-target="#modalDevolver" 
+                id='.$row['pres_codigo'].'><i class="fa fa-reply"> Devolver</i></a>';
 
         $add = array("0" => $row["pres_codigo"],
           "1" => $row["pres_fecha_s"],
@@ -66,20 +66,31 @@
     ?>
 
     <script>
-    var dataSet = <?php echo json_encode($encode);?>;
+      var dataSet = <?php echo json_encode($encode);?>;
       $(document).ready(function() {
         var table = $('#example').DataTable({
-            data: dataSet,
-            columns: [
-                { title: "Código" },
-                { title: "Fecha de salida" },
-                { title: "Plazo" },
-                { title: "Usuario" },
-                { title: "Libro" },
-                { title: "Operaciones" }
-            ]
-        } );
-      } );
+          data: dataSet,
+          columns: [
+            { title: "Código" },
+            { title: "Fecha de salida" },
+            { title: "Plazo" },
+            { title: "Usuario" },
+            { title: "Libro" },
+            { title: "Operaciones" }
+          ]
+        });
+
+        $('#example tbody').on('click', 'tr', function () {
+          var data = table.row( this ).data();
+          
+          // modificar id_prestamo del modal de confirmación
+          $('input[name="id_prestamo"]').val(data[0]); 
+
+          // escribir mensaje al confirmar devolución
+          $('#nombre_libro').text(`Confirmar devolución del libro "${data[4]}"`);
+        });
+
+      });
     </script>
     <?php mysql_close($link); ?>
   </head>
@@ -138,6 +149,31 @@
             <h2 style="margin-top:10px">Prestados</h2>
         </div>
 
+      <!-- Modal para confirmar devolución -->
+      <div class="modal fade" id="modalDevolver" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="myModalLabel">Confirmación<span id="load" style="display:none"> <img src="img/loading.gif"> Cargando...</span></h4>
+            </div>
+            <div class="modal-body">
+              <form id="formDevolver" method="GET" action="devolver.php">
+                <div class="form-group">
+                  <p id="nombre_libro"></p>
+                  <input type="hidden" name="id_prestamo" value="">
+                </div>
+                <div id="errorMessage">
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-primary">Aceptar</button>
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
       <table id="example" class="display" width="100%"></table>
     </div>
 
