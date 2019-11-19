@@ -1,4 +1,4 @@
--- phpMyAdmin SQL Dump
+﻿-- phpMyAdmin SQL Dump
 -- version 4.0.4
 -- http://www.phpmyadmin.net
 --
@@ -273,3 +273,11 @@ ALTER TABLE `usuarios`
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+ALTER TABLE libros 
+ADD COLUMN ejemplares_disp SMALLINT 
+DEFAULT 1;
+
+ALTER TABLE `prestamos` 
+CHANGE `pres_fecha_d` 
+`pres_fecha_d` DATE NULL DEFAULT NULL;

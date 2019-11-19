@@ -30,10 +30,10 @@
     global $selectLibros;
     global $id_libro;
     global $id_prestamo;
- 
+
     $results=mysql_query("select l.libr_codigo,l.libr_nombre,g.gene_descripcion,CONCAT(a.auto_nombre, ' ', a.auto_apellido) As auto_nombre ,t.tili_descripcion,o.orli_descripcion from libros l, generos g, autores a, tipos_libros t, origenes_libros o where l.generos_gene_codigo = g.gene_codigo and l.autores_auto_codigo = a.auto_codigo and l.tipos_libros_tili_codigo = t.tili_codigo and l.origenes_libros_orli_codigo = o.orli_codigo",$link);
-   
-    while($row = mysql_fetch_array($results)) { 
+
+    while($row = mysql_fetch_array($results)) {
       $prestado = mysql_query("SELECT ejemplares_disp AS n FROM libros where libr_codigo = ".$row["libr_codigo"],$link);
       $ejemplares_disp = mysql_fetch_object($prestado) ->  n;
       $accion = '<a href="#" class="edit" data-toggle="modal" data-target="#myModal" id='.$row['libr_codigo'].'><i class="fa fa-edit"> Editar </i></a><a href="eliminarLibros.php?libr_codigo='.$row['libr_codigo'].'"> <i class="fa fa-trash"> Eliminar</i></a>';
@@ -65,8 +65,8 @@
 
     // Obtener la cantidad de libros pendientes de cada usuario
     $cons = mysql_query("
-      SELECT usuarios_usua_documento AS doc, count(*) AS cant 
-      FROM prestamos WHERE pres_fecha_d IS NULL 
+      SELECT usuarios_usua_documento AS doc, count(*) AS cant
+      FROM prestamos WHERE pres_fecha_d IS NULL
       GROUP BY usuarios_usua_documento");
 
     $pendientes = array();
@@ -89,25 +89,25 @@
     }
 
     $generos = mysql_query('SELECT gene_codigo, gene_descripcion FROM generos',$link);
-    while($row10 = mysql_fetch_array($generos)) { 
+    while($row10 = mysql_fetch_array($generos)) {
     $selectGeneros.="<option value='".$row10['gene_codigo']."'>".utf8_encode($row10['gene_descripcion'])."</option>";
     }
 
     $autores = mysql_query("SELECT auto_codigo,CONCAT(auto_nombre, ' ', auto_apellido) As auto_nombre FROM autores",$link);
-    while($row1 = mysql_fetch_array($autores)) { 
+    while($row1 = mysql_fetch_array($autores)) {
     $selectAutores.="<option value='".$row1['auto_codigo']."'>".utf8_encode($row1['auto_nombre'])."</option>";
     }
     $tipos_libros = mysql_query('SELECT tili_codigo, tili_descripcion FROM tipos_libros',$link);
-    while($row2 = mysql_fetch_array($tipos_libros)) { 
+    while($row2 = mysql_fetch_array($tipos_libros)) {
     $selectTiposLibros.="<option value='".$row2['tili_codigo']."'>".utf8_encode($row2['tili_descripcion'])."</option>";
     }
     $origenes_libros = mysql_query('SELECT orli_codigo, orli_descripcion FROM origenes_libros',$link);
-    while($row3 = mysql_fetch_array($origenes_libros)) { 
+    while($row3 = mysql_fetch_array($origenes_libros)) {
     $selectOrigenesLibros.="<option value='".$row3['orli_codigo']."'>".utf8_encode($row3['orli_descripcion'])."</option>";
     }
 
     $consulta = mysql_query('SELECT MAX(libr_codigo) as max from libros',$link);
-    while($ruw = mysql_fetch_array($consulta)) { 
+    while($ruw = mysql_fetch_array($consulta)) {
     $id_libro=$ruw['max']+1;
     }
     ?>
@@ -136,19 +136,19 @@
           $('#formLibro input[name="id_libro"]').val(data[0]);
           $('#formLibro input[name="libr_nombre"]').val(data[1]);
           $('#formLibro input[name="modificar"]').val(1);
-          
+
           var gen=data[2];
           $("#generos option").each(function() { this.selected = (this.text == gen); });
-          
+
           var aut=data[3];
           $("#autores option").each(function() { this.selected = (this.text == aut); });
-          
+
           var til=data[4];
           $("#tipos_libros option").each(function() { this.selected = (this.text == til); });
-          
+
           var orl=data[5];
           $("#origenes_libros option").each(function() { this.selected = (this.text == orl); });
-          
+
           var lib=data[1];
           $("#libros option").each(function() { this.selected = (this.text == lib); });
         });
@@ -179,9 +179,9 @@
         $('#confirmar').click(function() {
           $('#formPrestamos').submit();
         });
-
       });
     </script>
+    <?php mysql_close($link); ?>
   </head>
 
   <body>
