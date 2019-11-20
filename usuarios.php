@@ -23,7 +23,7 @@
     $encode=array();
     global $selectCarreras;
     global $id_usuario;
-    $results=mysql_query("select u.usua_documento,u.usua_nombre,u.usua_apellido,u.usua_nacimiento,u.usua_contac,c.carr_descripcion from usuarios u, carreras c where u.carreras_carr_codigo = c.carr_codigo",$link);
+    $results=mysql_query("select u.usua_documento,u.usua_nombre,u.usua_apellido,u.usua_nacimiento,u.usua_direccion, u.usua_contac,c.carr_descripcion from usuarios u, carreras c where u.carreras_carr_codigo = c.carr_codigo",$link);
 
     while ($row = mysql_fetch_array($results)) {
 
@@ -33,9 +33,10 @@
           "1" => utf8_encode($row["usua_nombre"]),
           "2" => utf8_encode($row["usua_apellido"]),
           "3" => $row["usua_nacimiento"],
-          "4" => $row["usua_contac"],
-          "5" =>utf8_encode($row["carr_descripcion"]) ,
-          "6" => $accion);
+          "4" => $row["usua_direccion"],
+          "5" => $row["usua_contac"],
+          "6" =>utf8_encode($row["carr_descripcion"]) ,
+          "7" => $accion);
 
         $encode[]=$add;
     }
@@ -61,6 +62,7 @@
                 { title: "Nombre" },
                 { title: "Apellido" },
                 { title: "Nacimiento" },
+                { title: "Direccion"},
                 { title: "Contacto" },
                 { title: "Carrera" },
                 { title: "Operaciones" }
@@ -73,9 +75,10 @@
           $('#formUsuarios input[name="usua_nombre"]').val(data[1]);
           $('#formUsuarios input[name="usua_apellido"]').val(data[2]);
           $('#formUsuarios input[name="usua_nacimiento"]').val(data[3]);
-          $('#formUsuarios input[name="usua_contac"]').val(data[4]);
+          $('#formUsuarios input[name="usua_direccion"]').val(data[4]);
+          $('#formUsuarios input[name="usua_contac"]').val(data[5]);
           $('#formUsuarios input[name="modificar"]').val(1);
-          var car=data[5];
+          var car=data[6];
           $("#carreras option").each(function() { this.selected = (this.text == car); });
         });
 
@@ -85,6 +88,7 @@
           $('#formUsuarios input[name="usua_nombre"]').val('');
           $('#formUsuarios input[name="usua_apellido"]').val('');
           $('#formUsuarios input[name="usua_nacimiento"]').val('');
+          $('#formUsuarios input[name="usua_direccion"]').val('');
           $('#formUsuarios input[name="usua_contac"]').val('');
           $('#formUsuarios input[name="modificar"]').val(0);
           $("#carreras")[0].selectedIndex = 0;
@@ -173,6 +177,10 @@
                   <label for="usua_nacimiento">Nacimiento</label>
                   <input type="date" class="form-control" id="usua_nacimiento" name="usua_nacimiento" placeholder="Nacimiento" required value="">
                   <input type="hidden" class="form-control" id="modificar" name="modificar" required value="">
+                </div>
+                <div class="form-group">
+                  <label for="usua_apellido">Direccion</label>
+                  <input type="text" class="form-control" id="usua_direccion" name="usua_direccion" placeholder="Direccion" required value="">
                 </div>
                 <div class="form-group">
                   <div class="form-group">

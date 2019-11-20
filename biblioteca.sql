@@ -1,11 +1,11 @@
-﻿-- phpMyAdmin SQL Dump
+-- phpMyAdmin SQL Dump
 -- version 4.0.4
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 09-06-2017 a las 06:06:43
+-- Tiempo de generación: 20-11-2019 a las 12:21:29
 -- Versión del servidor: 5.6.12-log
--- Versión de PHP: 5.4.16
+-- Versión de PHP: 5.4.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -126,6 +126,7 @@ CREATE TABLE IF NOT EXISTS `libros` (
   `autores_auto_codigo` int(11) NOT NULL,
   `tipos_libros_tili_codigo` int(11) NOT NULL,
   `origenes_libros_orli_codigo` int(11) NOT NULL,
+  `ejemplares_disp` smallint(6) DEFAULT '1',
   PRIMARY KEY (`libr_codigo`),
   UNIQUE KEY `libr_codigo_UNIQUE` (`libr_codigo`),
   KEY `fk_libros_generos1_idx` (`generos_gene_codigo`),
@@ -138,10 +139,10 @@ CREATE TABLE IF NOT EXISTS `libros` (
 -- Volcado de datos para la tabla `libros`
 --
 
-INSERT INTO `libros` (`libr_codigo`, `libr_nombre`, `generos_gene_codigo`, `autores_auto_codigo`, `tipos_libros_tili_codigo`, `origenes_libros_orli_codigo`) VALUES
-(1, 'Hijo de Hombre', 2, 1, 1, 1),
-(2, 'Los hombres de Celina', 1, 2, 1, 1),
-(3, 'Informatica', 1, 1, 2, 1);
+INSERT INTO `libros` (`libr_codigo`, `libr_nombre`, `generos_gene_codigo`, `autores_auto_codigo`, `tipos_libros_tili_codigo`, `origenes_libros_orli_codigo`, `ejemplares_disp`) VALUES
+(1, 'Hijo de Hombre', 2, 1, 1, 1, 1),
+(2, 'Los hombres de Celina', 1, 2, 1, 1, 1),
+(3, 'Informatica', 1, 1, 2, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -174,7 +175,7 @@ CREATE TABLE IF NOT EXISTS `prestamos` (
   `pres_codigo` int(11) NOT NULL AUTO_INCREMENT,
   `pres_fecha_s` date NOT NULL,
   `pres_plazo` int(11) NOT NULL,
-  `pres_fecha_d` date NOT NULL,
+  `pres_fecha_d` date DEFAULT NULL,
   `usuarios_usua_documento` int(11) NOT NULL,
   `libros_libr_codigo` int(11) NOT NULL,
   PRIMARY KEY (`pres_codigo`),
@@ -223,6 +224,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `usua_nombre` varchar(45) NOT NULL,
   `usua_apellido` varchar(45) NOT NULL,
   `usua_nacimiento` date DEFAULT NULL,
+  `usua_contac` varchar(13) NOT NULL,
   `usua_biometrico` varchar(45) DEFAULT NULL,
   `carreras_carr_codigo` int(11) NOT NULL,
   PRIMARY KEY (`usua_documento`),
@@ -234,9 +236,9 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`usua_documento`, `usua_nombre`, `usua_apellido`, `usua_nacimiento`, `usua_biometrico`, `carreras_carr_codigo`) VALUES
-(4852254, 'Laura Anahi', 'Gonzalez Irala', '1998-02-25', NULL, 1),
-(5622355, 'Magaly Vanesa', 'Suchecki Endler', '1997-06-24', NULL, 1);
+INSERT INTO `usuarios` (`usua_documento`, `usua_nombre`, `usua_apellido`, `usua_nacimiento`, `usua_contac`, `usua_biometrico`, `carreras_carr_codigo`) VALUES
+(4852254, 'Laura Anahi', 'Gonzalez Irala', '1998-02-25', '', NULL, 1),
+(5622355, 'Magaly Vanesa', 'Suchecki Endler', '1997-06-24', '', NULL, 1);
 
 --
 -- Restricciones para tablas volcadas
@@ -252,17 +254,17 @@ ALTER TABLE `carreras`
 -- Filtros para la tabla `libros`
 --
 ALTER TABLE `libros`
-  ADD CONSTRAINT `fk_libros_generos1` FOREIGN KEY (`generos_gene_codigo`) REFERENCES `generos` (`gene_codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_libros_autores1` FOREIGN KEY (`autores_auto_codigo`) REFERENCES `autores` (`auto_codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_libros_tipos_libros1` FOREIGN KEY (`tipos_libros_tili_codigo`) REFERENCES `tipos_libros` (`tili_codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_libros_origenes_libros1` FOREIGN KEY (`origenes_libros_orli_codigo`) REFERENCES `origenes_libros` (`orli_codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_libros_generos1` FOREIGN KEY (`generos_gene_codigo`) REFERENCES `generos` (`gene_codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_libros_origenes_libros1` FOREIGN KEY (`origenes_libros_orli_codigo`) REFERENCES `origenes_libros` (`orli_codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_libros_tipos_libros1` FOREIGN KEY (`tipos_libros_tili_codigo`) REFERENCES `tipos_libros` (`tili_codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `prestamos`
 --
 ALTER TABLE `prestamos`
-  ADD CONSTRAINT `fk_prestamos_usuarios1` FOREIGN KEY (`usuarios_usua_documento`) REFERENCES `usuarios` (`usua_documento`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_prestamos_libros1` FOREIGN KEY (`libros_libr_codigo`) REFERENCES `libros` (`libr_codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_prestamos_libros1` FOREIGN KEY (`libros_libr_codigo`) REFERENCES `libros` (`libr_codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_prestamos_usuarios1` FOREIGN KEY (`usuarios_usua_documento`) REFERENCES `usuarios` (`usua_documento`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `usuarios`
@@ -273,11 +275,3 @@ ALTER TABLE `usuarios`
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
-ALTER TABLE libros 
-ADD COLUMN ejemplares_disp SMALLINT 
-DEFAULT 1;
-
-ALTER TABLE `prestamos` 
-CHANGE `pres_fecha_d` 
-`pres_fecha_d` DATE NULL DEFAULT NULL;

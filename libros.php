@@ -149,6 +149,8 @@
           var orl=data[5];
           $("#origenes_libros option").each(function() { this.selected = (this.text == orl); });
 
+          $('#formLibro input[name="ejemp"]').val(data[6]);
+
           var lib=data[1];
           $("#libros option").each(function() { this.selected = (this.text == lib); });
         });
