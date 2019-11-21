@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 20-11-2019 a las 12:21:29
+-- Tiempo de generación: 21-11-2019 a las 19:02:07
 -- Versión del servidor: 5.6.12-log
 -- Versión de PHP: 5.4.12
 
@@ -224,6 +224,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `usua_nombre` varchar(45) NOT NULL,
   `usua_apellido` varchar(45) NOT NULL,
   `usua_nacimiento` date DEFAULT NULL,
+  `usua_direccion` varchar(255) NOT NULL,
   `usua_contac` varchar(13) NOT NULL,
   `usua_biometrico` varchar(45) DEFAULT NULL,
   `carreras_carr_codigo` int(11) NOT NULL,
@@ -236,9 +237,33 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`usua_documento`, `usua_nombre`, `usua_apellido`, `usua_nacimiento`, `usua_contac`, `usua_biometrico`, `carreras_carr_codigo`) VALUES
-(4852254, 'Laura Anahi', 'Gonzalez Irala', '1998-02-25', '', NULL, 1),
-(5622355, 'Magaly Vanesa', 'Suchecki Endler', '1997-06-24', '', NULL, 1);
+INSERT INTO `usuarios` (`usua_documento`, `usua_nombre`, `usua_apellido`, `usua_nacimiento`, `usua_direccion`, `usua_contac`, `usua_biometrico`, `carreras_carr_codigo`) VALUES
+(2, 'lolo', 'l', '0022-02-22', 'grti', '1', NULL, 2),
+(8, 'lolo', 'l', '0022-02-22', 'grt', '2', NULL, 2),
+(4852254, 'Laura Anahi', 'Gonzalez Irala', '1998-02-25', '', '', NULL, 1),
+(5622355, 'Magaly Vanesa', 'Suchecki Endler', '1997-06-24', '', '', NULL, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `visitas`
+--
+
+CREATE TABLE IF NOT EXISTS `visitas` (
+  `vita_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `vita_nombre` varchar(150) NOT NULL,
+  `vita_fecha` date NOT NULL,
+  `vita_motivo` text,
+  PRIMARY KEY (`vita_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Volcado de datos para la tabla `visitas`
+--
+
+INSERT INTO `visitas` (`vita_id`, `vita_nombre`, `vita_fecha`, `vita_motivo`) VALUES
+(1, 'loro', '2019-11-21', 'mmmmmmmm'),
+(2, 'ggg', '0000-00-00', 'f');
 
 --
 -- Restricciones para tablas volcadas
