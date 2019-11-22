@@ -100,7 +100,7 @@
   <body>
     <div class="container">
       <nav class="navbar navbar-default">
-        <div class="container-fluid">
+        <div class="container-fluid"><button type="button" class="btn btn-danger pull-right" onclick="window.location.href='visitas.php'" style="margin-top: 8px; width: 100px">Visitas</button>
           <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
               <span class="sr-only">Biblioteca</span>

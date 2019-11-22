@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
-    <title>Biblioteca UNAE</title>
+    <title>Biblioteca Bella Vista</title>
     <meta http-equiv='Content-Type' content='text/html'; charset='UTF-8'/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -26,7 +26,7 @@
     $results=mysql_query("select * from origenes_libros", $link);
 
     while ($row = mysql_fetch_array($results)) {
-        $accion = '<a href="#" class="edit" data-toggle="modal" data-target="#myModal" id='.$row['orli_codigo'].'><i class="fa fa-edit"> Editar </i></a><a href="eliminarOrigenLibro.php?orli_codigo='.$row['orli_codigo'].'"> <i class="fa fa-trash"> Eliminar</i></a>';
+        $accion = '<a href="#" class="edit" data-toggle="modal" data-target="#myModal" id='.$row['orli_codigo'].'><i class="fa fa-edit"> Editar </i></a>';
         $add = array("0" => $row["orli_codigo"],
         "1" => utf8_encode($row["orli_descripcion"]),
         "2"   => $accion);
@@ -72,7 +72,7 @@
   <body>
     <div class="container">
       <nav class="navbar navbar-default">
-        <div class="container-fluid">
+        <div class="container-fluid"><button type="button" class="btn btn-danger pull-right" onclick="window.location.href='visitas.php'" style="margin-top: 8px; width: 100px">Visitas</button>
           <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
               <span class="sr-only">Biblioteca</span>
